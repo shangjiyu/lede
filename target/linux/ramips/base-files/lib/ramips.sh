@@ -451,6 +451,9 @@ ramips_board_detect() {
 	*"RT-N14U")
 		name="rt-n14u"
 		;;
+	*"DTeam RY-1A")
+		name="ry-1a"
+		;;
 	*"RT-N15")
 		name="rt-n15"
 		;;

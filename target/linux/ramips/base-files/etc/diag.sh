@@ -120,6 +120,7 @@ get_status_led() {
 	rt-ac51u|\
 	rt-n13u|\
 	rt-n14u|\
+	ry-1a|\
 	rt-n15|\
 	rt-n56u|\
 	wl-330n|\

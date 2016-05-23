@@ -328,6 +328,11 @@ rt-n14u)
 tew-714tru)
 	set_usb_led "$board:red:usb"
 	set_wifi_led "$board:green:wifi"
+ry-1a)
+	ucidef_set_led_default "power" "power" "dteam:red:power" "0"
+	ucidef_set_led_netdev "wan" "wan" "dteam:red:wan" eth0.2
+	set_wifi_led "dteam:red:wifi"
+	set_usb_led "dteam:red:usb"
 	;;
 tiny-ac)
 	set_wifi_led "$board:orange:wifi"

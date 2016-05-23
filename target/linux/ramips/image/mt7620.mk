@@ -420,6 +420,13 @@ define Device/wrh-300cr
 endef
 TARGET_DEVICES += wrh-300cr
 
+define Device/ry-1a
+  DTS := RY-1A
+  IMAGE_SIZE := $(ralink_default_fw_size_16M)
+  DEVICE_TITLE := DTeam RY-1A
+endef
+TARGET_DEVICES += ry-1a
+
 define Device/wrtnode
   DTS := WRTNODE
   IMAGE_SIZE := $(ralink_default_fw_size_16M)

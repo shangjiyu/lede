@@ -132,6 +132,7 @@ platform_check_image() {
 	rt-n10-plus|\
 	rt-n13u|\
 	rt-n14u|\
+	ry-1a|\
 	rt-n15|\
 	rt-n56u|\
 	rut5xx|\
