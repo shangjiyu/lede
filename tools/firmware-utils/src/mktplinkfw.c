@@ -283,6 +283,27 @@ static void usage(int status)
 	exit(status);
 }
 
+static uint32_t bits_align(uint32_t size) {
+	int i, msb = -1, n = 0;
+
+	for (i = 31; i >= 0; i--) {
+		if (size & (1 << i)) {
+			if (msb < 0)
+				msb = i;
+			n++;
+		}
+	}
+
+	if (n <= 1)
+		return size;
+
+	if (msb == 31)
+		return 0;
+
+	return 1 << (msb + 1);
+}
+
+
 static void get_md5(const char *data, int size, uint8_t *md5)
 {
 	MD5_CTX ctx;
@@ -340,6 +361,7 @@ static int check_options(void)
 {
 	int ret;
 	int exceed_bytes;
+	uint32_t expect_size;
 
 	if (inspect_info.file_name) {
 		ret = get_file_stat(&inspect_info);
@@ -437,8 +459,19 @@ static int check_options(void)
 
 			exceed_bytes = kernel_len + rootfs_info.file_size - (fw_max_len - sizeof(struct fw_header));
 			if (exceed_bytes > 0) {
-				ERR("images are too big by %i bytes", exceed_bytes);
-				return -1;
+      				expect_size = bits_align(kernel_len + rootfs_info.file_size + sizeof(struct fw_header));
+				if (expect_size <= 0x1000000) {
+					layout->fw_max_len = expect_size - (bits_align(layout->fw_max_len) - layout->fw_max_len);
+					fw_max_len = layout->fw_max_len - reserved_space;
+					exceed_bytes = kernel_len + rootfs_info.file_size - (fw_max_len - sizeof(struct fw_header));
+					if (exceed_bytes > 0)
+						goto err_size_exceed;
+					DBG("firmware size expanded to %u", layout->fw_max_len);
+				} else {
+err_size_exceed:
+					ERR("images are too big by %i bytes", exceed_bytes);
+					return -1;
+				}
 			}
 		} else {
 			exceed_bytes = kernel_info.file_size - (rootfs_ofs - sizeof(struct fw_header));
