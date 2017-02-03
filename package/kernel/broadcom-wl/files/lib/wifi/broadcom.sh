@@ -463,7 +463,7 @@ detect_broadcom() {
 			set wireless.wl${i}.channel=${channel:-11}
 			set wireless.wl${i}.txantenna=3
 			set wireless.wl${i}.rxantenna=3
-			set wireless.wl${i}.disabled=1
+			set wireless.wl${i}.disabled=0
 
 			set wireless.default_wl${i}=wifi-iface
 			set wireless.default_wl${i}.device=wl${i}

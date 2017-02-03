@@ -141,7 +141,7 @@ static int cybertan_parse_partitions(struct mtd_info *master,
 	trx_parts[0].name = "u-boot";
 	trx_parts[0].offset = 0;
 	trx_parts[0].size = uboot_len;
-	trx_parts[0].mask_flags = MTD_WRITEABLE;
+	//trx_parts[0].mask_flags = MTD_WRITEABLE;
 
 	trx_parts[1].name = "kernel";
 	trx_parts[1].offset = trx_parts[0].offset + trx_parts[0].size;
@@ -157,12 +157,12 @@ static int cybertan_parse_partitions(struct mtd_info *master,
 	trx_parts[3].name = "nvram";
 	trx_parts[3].offset = master->size - nvram_len - art_len;
 	trx_parts[3].size = nvram_len;
-	trx_parts[3].mask_flags = MTD_WRITEABLE;
+	//trx_parts[3].mask_flags = MTD_WRITEABLE;
 
 	trx_parts[4].name = "art";
 	trx_parts[4].offset = master->size - art_len;
 	trx_parts[4].size = art_len;
-	trx_parts[4].mask_flags = MTD_WRITEABLE;
+	//trx_parts[4].mask_flags = MTD_WRITEABLE;
 
 	trx_parts[5].name = "firmware";
 	trx_parts[5].offset = uboot_len;
