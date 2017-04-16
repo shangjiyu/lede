@@ -26,7 +26,7 @@ PKG_FLAGS:=nonshared
 PKG_BUILD_DEPENDS := util-linux
 PKG_CONFIG_DEPENDS := CONFIG_NAND_SUPPORT CONFIG_FSTOOLS_UBIFS_EXTROOT
 
-PKG_MAINTAINER:=John Crispin <blogic@openwrt.org>
+PKG_MAINTAINER:=John Crispin <john@phrozen.org>
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
