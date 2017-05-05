@@ -24,6 +24,12 @@ buffalo,wzr-1750dhp)
 	board_config_flush
 	exit 0
 	;;
+phicomm,k3)
+	ucidef_add_switch "switch0" \
+		"0:lan:2" "1:lan:1" "2:lan:3" "3:wan:4" "5t@eth0"
+	board_config_flush
+	exit 0
+	;;
 esac
 
 wan_macaddr="$(nvram get wan_hwaddr)"
@@ -88,10 +94,6 @@ elif echo "$vlan1ports" | egrep -q "^0 1 2 3 5 7 8" && \
      echo "$vlan2ports" | egrep -q "^4 8"; then
 	ucidef_add_switch "switch0" \
 		"0:lan" "1:lan" "2:lan" "3:lan" "5:lan" "7:lan" "4:wan" "8t@$ifname"
-elif echo "$vlan1ports" | egrep -q "^0 1 2 5" && \
-     echo "$vlan2ports" | egrep -q "^3 5"; then
-	ucidef_add_switch "switch0" \
-		"0:lan" "1:lan" "2:lan" "3:wan" "5t@$ifname"
 else
 	ucidef_add_switch "switch0" \
 		"0:lan" "1:lan" "2:lan" "3:lan" "4:wan" "5t@$ifname"
