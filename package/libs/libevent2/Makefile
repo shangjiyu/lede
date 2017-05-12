@@ -12,11 +12,12 @@ PKG_VERSION:=2.1.8
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL=https://github.com/libevent/libevent.git
-PKG_SOURCE_VERSION:=release-2.1.8-stable
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/libevent2-$(PKG_VERSION)
 PKG_SOURCE:=libevent-$(PKG_VERSION)-stable.tar.gz
-PKG_MAINTAINER:=Dengfeng Liu <liudengfeng@kunteng.org>
+PKG_SOURCE_URL:=https://github.com/libevent/libevent.git
+PKG_SOURCE_VERSION:=release-$(PKG_VERSION)-stable
+PKG_MIRROR_HASH:=7227b9ae556f22f9d9815c6ba2630b614510f3cb0ac44c3775fe55c5cae720bb
+PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 PKG_LICENSE:=BSD-3-Clause
 
 PKG_FIXUP:=autoreconf
@@ -30,7 +31,6 @@ define Package/libevent2/Default
   CATEGORY:=Libraries
   TITLE:=Event notification
   URL:=http://www.monkey.org/~provos/libevent/
-  DEPENDS+=+libopenssl
 endef
 
 define Package/libevent2/Default/description
@@ -47,7 +47,7 @@ endef
 
 define Package/libevent2
   $(call Package/libevent2/Default)
-  TITLE+= library (version 2.0)
+  TITLE+= library (version 2.1)
 endef
 
 define Package/libevent2/description
@@ -59,7 +59,7 @@ endef
 
 define Package/libevent2-core
   $(call Package/libevent2/Default)
-  TITLE+= core library (version 2.0)
+  TITLE+= core library (version 2.1)
 endef
 
 define Package/libevent2-core/description
@@ -71,7 +71,7 @@ endef
 
 define Package/libevent2-extra
   $(call Package/libevent2/Default)
-  TITLE+= extra library (version 2.0)
+  TITLE+= extra library (version 2.1)
 endef
 
 define Package/libevent2-extra/description
@@ -83,7 +83,8 @@ endef
 
 define Package/libevent2-openssl
   $(call Package/libevent2/Default)
-  TITLE+= OpenSSL library (version 2.0)
+  TITLE+= OpenSSL library (version 2.1)
+  DEPENDS+=+libopenssl
 endef
 
 define Package/libevent2-openssl/description
@@ -95,7 +96,7 @@ endef
 
 define Package/libevent2-pthreads
   $(call Package/libevent2/Default)
-  TITLE+= Pthreads library (version 2.0)
+  TITLE+= Pthreads library (version 2.1)
   DEPENDS+=+libpthread
 endef
 
@@ -111,10 +112,8 @@ TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
-	--disable-debug-mode
-
-MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS)"
+	--disable-debug-mode \
+	--disable-samples
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
