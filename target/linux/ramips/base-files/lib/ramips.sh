@@ -217,6 +217,9 @@ ramips_board_detect() {
 	*"GL-MT750")
 		name="gl-mt750"
 		;;
+	*"GL-MT300N-V2")
+		name="gl-mt300n-v2"
+		;;
 	*"HC5661")
 		name="hc5661"
 		;;
@@ -486,6 +489,9 @@ ramips_board_detect() {
 		;;
 	*"UBNT-ERX")
 		name="ubnt-erx"
+		;;
+	*"UBNT-ERX-SFP")
+		name="ubnt-erx-sfp"
 		;;
 	*"UR-326N4G")
 		name="ur-326n4g"

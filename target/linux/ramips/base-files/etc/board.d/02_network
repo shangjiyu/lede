@@ -171,6 +171,7 @@ ramips_setup_interfaces()
 	rt-n14u|\
 	ry-1a|\
 	ubnt-erx|\
+	ubnt-erx-sfp|\
 	ur-326n4g|\
 	wrtnode|\
 	wrtnode2p | \
@@ -180,6 +181,10 @@ ramips_setup_interfaces()
 	zbt-wa05)
 		ucidef_add_switch "switch0" \
 			"1:lan" "2:lan" "3:lan" "4:lan" "0:wan" "6@eth0"
+		;;
+	gl-mt300n-v2)
+		ucidef_add_switch "switch0" \
+			"1:lan" "0:wan" "6@eth0"
 		;;
 	awapn2403)
 		ucidef_add_switch "switch0" \

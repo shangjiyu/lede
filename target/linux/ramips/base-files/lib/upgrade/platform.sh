@@ -65,6 +65,7 @@ platform_check_image() {
 	gl-mt300a|\
 	gl-mt300n|\
 	gl-mt750|\
+	gl-mt300n-v2|\
 	hc5*61|\
 	hc5661a|\
 	hg255d|\
@@ -252,7 +253,8 @@ platform_check_image() {
 		# these boards use metadata images
 		return 0
 		;;
-	ubnt-erx)
+	ubnt-erx|\
+	ubnt-erx-sfp)
 		nand_do_platform_check "$board" "$1"
 		return $?;
 		;;
@@ -274,20 +276,9 @@ platform_nand_pre_upgrade() {
 	local board=$(ramips_board_name)
 
 	case "$board" in
-	ubnt-erx)
+	ubnt-erx|\
+	ubnt-erx-sfp)
 		platform_upgrade_ubnt_erx "$ARGV"
-		;;
-	esac
-}
-
-platform_pre_upgrade() {
-	local board=$(ramips_board_name)
-
-	case "$board" in
-	hc5962|\
-	r6220|\
-    	ubnt-erx)
-		nand_do_upgrade "$ARGV"
 		;;
 	esac
 }
@@ -296,6 +287,12 @@ platform_do_upgrade() {
 	local board=$(ramips_board_name)
 
 	case "$board" in
+	hc5962|\
+	r6220|\
+	ubnt-erx|\
+	ubnt-erx-sfp)
+		nand_do_upgrade "$ARGV"
+		;;
 	*)
 		default_do_upgrade "$ARGV"
 		;;
