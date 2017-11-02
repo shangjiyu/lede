@@ -1,11 +1,11 @@
 #!/bin/sh
 # Copyright (C) 2009-2013 OpenWrt.org
 
+. /lib/functions.sh
 . /lib/functions/leds.sh
-. /lib/ar71xx.sh
 
 get_status_led() {
-	local board=$(ar71xx_board_name)
+	local board=$(board_name)
 
 	case $board in
 	a40)
@@ -23,12 +23,16 @@ get_status_led() {
 	antminer-s1|\
 	antminer-s3|\
 	antminer-r1|\
+	eap120|\
 	minibox-v1|\
 	som9331|\
 	sr3200|\
 	tl-wr802n-v2|\
 	xd3200)
 		status_led="$board:green:system"
+		;;
+	ap121f)
+		status_led="$board:green:vpn"
 		;;
 	ap132|\
 	ap531b0|\
@@ -52,23 +56,27 @@ get_status_led() {
 		status_led="ap135:green:status"
 		;;
 	archer-c25-v1|\
+	archer-c58-v1|\
 	archer-c59-v1|\
 	archer-c60-v1|\
+	archer-c7-v4|\
 	fritz300e|\
+	gl-usb150|\
 	mr12|\
 	mr16|\
 	nbg6616|\
 	sc1750|\
 	sc450|\
-	tl-wpa8630)
+	tl-wpa8630|\
+	tl-wr902ac-v1)
 		status_led="$board:green:power"
 		;;
 	ap90q|\
 	cpe830|\
 	cpe870|\
+	gl-ar300m|\
 	gl-inet|\
-	gl-mifi|\
-	gl-ar300m)
+	gl-mifi)
 		status_led="$board:green:lan"
 		;;
 	ap96)
@@ -86,12 +94,12 @@ get_status_led() {
 		status_led="$board:red:sys"
 		;;
 	bullet-m|\
-	rocket-m|\
-	rocket-m-xw|\
+	loco-m-xw|\
 	nano-m|\
 	nanostation-m|\
 	nanostation-m-xw|\
-	loco-m-xw)
+	rocket-m|\
+	rocket-m-xw)
 		status_led="ubnt:green:link4"
 		;;
 	rocket-m-ti)
@@ -125,9 +133,7 @@ get_status_led() {
 	cpe510)
 		status_led="tp-link:green:link4"
 		;;
-	cr3000)
-		status_led="pcs:amber:power"
-		;;
+	cr3000|\
 	cr5000)
 		status_led="pcs:amber:power"
 		;;
@@ -172,20 +178,18 @@ get_status_led() {
 	dw33d)
 		status_led="$board:blue:status"
 		;;
-	eap120)
-		status_led="$(ar71xx_board_name):green:system"
-		;;
 	eap300v2)
 		status_led="engenius:blue:power"
 		;;
-	ens202ext)
+	ens202ext|\
+	esr900)
 		status_led="engenius:amber:power"
 		;;
 	eap7660d)
 		status_led="$board:green:ds4"
 		;;
-	el-mini|\
-	el-m150)
+	el-m150|\
+	el-mini)
 		status_led="easylink:green:system"
 		;;
 	ew-dorin|\
@@ -198,9 +202,6 @@ get_status_led() {
 	epg5000|\
 	esr1750)
 		status_led="$board:amber:power"
-		;;
-	esr900)
-		status_led="engenius:amber:power"
 		;;
 	hiveap-121|\
 	nbg6716)
@@ -245,9 +246,7 @@ get_status_led() {
 		status_led="mr900:blue:power"
 		;;
 	mynet-n600|\
-	mynet-n750)
-		status_led="wd:blue:power"
-		;;
+	mynet-n750|\
 	mynet-rext)
 		status_led="wd:blue:power"
 		;;
@@ -259,13 +258,13 @@ get_status_led() {
 		status_led="nbg460n:green:power"
 		;;
 	om2p|\
-	om2pv2|\
-	om2pv4|\
 	om2p-hs|\
 	om2p-hsv2|\
 	om2p-hsv3|\
 	om2p-hsv4|\
-	om2p-lc)
+	om2p-lc|\
+	om2pv2|\
+	om2pv4)
 		status_led="om2p:blue:power"
 		;;
 	om5p|\
@@ -310,12 +309,11 @@ get_status_led() {
 		status_led="rb750:green:act"
 		;;
 	rb-750-r2|\
+	rb-750p-pbr2|\
 	rb-750up-r2|\
 	rb-911g-2hpnd|\
 	rb-911g-5hpacd|\
 	rb-911g-5hpnd|\
-	rb-912uag-2hpnd|\
-	rb-912uag-5hpnd|\
 	rb-941-2nd|\
 	rb-951ui-2nd|\
 	rb-952ui-5ac2nd|\
@@ -327,6 +325,8 @@ get_status_led() {
 	rb-951ui-2hnd)
 		status_led="rb:green:act"
 		;;
+	rb-912uag-2hpnd|\
+	rb-912uag-5hpnd|\
 	rb-sxt2n|\
 	rb-sxt5n)
 		status_led="rb:green:power"
@@ -359,7 +359,8 @@ get_status_led() {
 	tew-823dru)
 		status_led="trendnet:green:power"
 		;;
-	tl-mr3020)
+	tl-mr3020|\
+	tl-wr2543n)
 		status_led="tp-link:green:wps"
 		;;
 	tl-wa750re)
@@ -369,6 +370,7 @@ get_status_led() {
 	tl-wa850re-v2)
 		status_led="tp-link:blue:re"
 		;;
+	tl-wa855re-v1|\
 	tl-wa860re)
 		status_led="tp-link:green:power"
 		;;
@@ -381,6 +383,8 @@ get_status_led() {
 	tl-mr3420-v2|\
 	tl-wa701nd-v2|\
 	tl-wa801nd-v2|\
+	tl-wa801nd-v3|\
+	tl-wa830re-v2|\
 	tl-wa901nd|\
 	tl-wa901nd-v2|\
 	tl-wa901nd-v3|\
@@ -394,14 +398,12 @@ get_status_led() {
 	tl-wr740n-v6|\
 	tl-wr741nd|\
 	tl-wr741nd-v4|\
-	tl-wa801nd-v3|\
 	tl-wr840n-v2|\
 	tl-wr840n-v3|\
 	tl-wr841n-v1|\
 	tl-wr841n-v7|\
 	tl-wr841n-v8|\
 	tl-wr841n-v11|\
-	tl-wa830re-v2|\
 	tl-wr842n-v2|\
 	tl-wr842n-v3|\
 	tl-wr941nd|\
@@ -410,11 +412,11 @@ get_status_led() {
 		;;
 	archer-c5|\
 	archer-c7|\
-	tl-wdr4900-v2|\
 	tl-mr10u|\
 	tl-mr12u|\
 	tl-mr13u|\
 	tl-wdr4300|\
+	tl-wdr4900-v2|\
 	tl-wr703n|\
 	tl-wr710n|\
 	tl-wr720n-v3|\
@@ -426,9 +428,6 @@ get_status_led() {
 		;;
 	tl-wr841n-v9)
 		status_led="tp-link:green:qss"
-		;;
-	tl-wr2543n)
-		status_led="tp-link:green:wps"
 		;;
 	tl-wdr6500-v2)
 		status_led="tp-link:white:system"
@@ -450,6 +449,9 @@ get_status_led() {
 	airgateway|\
 	airgatewaypro)
 		status_led="ubnt:white:status"
+		;;
+	wi2a-ac200i)
+		status_led="nokia:green:ctrl"
 		;;
 	whr-g301n|\
 	whr-hp-g300n|\
@@ -484,8 +486,8 @@ get_status_led() {
 	wpj563)
 		status_led="$board:green:sig1"
 		;;
-	wrt400n|\
-	wrt160nl)
+	wrt160nl|\
+	wrt400n)
 		status_led="$board:blue:wps"
 		;;
 	zcn-1523h-2|\
@@ -513,13 +515,16 @@ set_state() {
 		;;
 	done)
 		status_led_on
-		case $(ar71xx_board_name) in
+		case $(board_name) in
 		gl-ar300m)
 			fw_printenv lc >/dev/null 2>&1 && fw_setenv "bootcount" 0
 			;;
 		qihoo-c301)
 			local n=$(fw_printenv activeregion | cut -d = -f 2)
 			fw_setenv "image${n}trynum" 0
+			;;
+		wi2a-ac200i)
+			fw_setenv PKRstCnt 0
 			;;
 		esac
 		;;

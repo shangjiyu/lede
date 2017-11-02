@@ -41,11 +41,11 @@ kirkwood_board_detect() {
 		name="pogo_e02"
 		;;
 
-	"Linksys EA3500")
+	"Linksys Audi (EA3500)")
 		name="linksys-audi"
 		;;
 
-	"Linksys E4200v2 / EA4500")
+	"Linksys Viper (E4200v2 / EA4500)")
 		name="linksys-viper"
 		;;
 
@@ -85,14 +85,4 @@ kirkwood_board_detect() {
 
 	echo "$KIRKWOOD_BOARD_NAME" > /tmp/sysinfo/board_name
 	echo "$KIRKWOOD_MODEL" > /tmp/sysinfo/model
-}
-
-kirkwood_board_name() {
-	local name
-
-	[ -f /tmp/sysinfo/board_name ] || kirkwood_board_detect
-	[ -f /tmp/sysinfo/board_name ] && name=$(cat /tmp/sysinfo/board_name)
-	[ -z "$name" ] && name="unknown"
-
-	echo "$name"
 }

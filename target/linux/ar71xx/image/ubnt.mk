@@ -63,7 +63,7 @@ endef
 define Device/ubnt-bz
   $(Device/ubnt)
   UBNT_TYPE := BZ
-  UBNT_CHIP := ar934x
+  UBNT_CHIP := ar7240
 endef
 
 define Device/rw2458n
@@ -256,4 +256,3 @@ define Device/ubnt-unifi-outdoor-plus
   BOARDNAME := UBNT-UOP
   DEVICE_PROFILE := UBNT
 endef
-TARGET_DEVICES += ubnt-uap-pro ubnt-unifi-outdoor-plus

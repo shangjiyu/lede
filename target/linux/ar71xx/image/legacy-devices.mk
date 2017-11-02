@@ -132,24 +132,6 @@ define LegacyDevice/DB120
 endef
 LEGACY_DEVICES += DB120
 
-define LegacyDevice/EWDORINAP
-  DEVICE_TITLE := Embedded Wireless Dorin Platform (4MB flash)
-  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-ledtrig-usbport kmod-usb-storage
-endef
-LEGACY_DEVICES += EWDORINAP
-
-define LegacyDevice/EWDORINRT
-  DEVICE_TITLE := Embedded Wireless Dorin Router
-  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-ledtrig-usbport kmod-usb-storage
-endef
-LEGACY_DEVICES += EWDORINRT
-
-define LegacyDevice/EWDORIN16M
-  DEVICE_TITLE := Embedded Wireless Dorin Platform (16MB flash)
-  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-ledtrig-usbport kmod-usb-storage
-endef
-LEGACY_DEVICES += EWDORIN16M
-
 define LegacyDevice/HORNETUBx2
   DEVICE_TITLE := ALFA Network Hornet-UB-x2 board (16MB flash, 64MB ram)
   DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-ledtrig-usbport
@@ -166,18 +148,6 @@ define LegacyDevice/WLR8100
   DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-ledtrig-usbport kmod-usb3
 endef
 LEGACY_DEVICES += WLR8100
-
-define LegacyDevice/YUN_8M
-  DEVICE_TITLE := Arduino Yun based on Atheros AR9331 (8MB flash)
-  DEVICE_PACKAGES := kmod-usb-core kmod-usb2
-endef
-LEGACY_DEVICES += YUN_8M
-
-define LegacyDevice/YUN_16M
-  DEVICE_TITLE := Arduino Yun based on Atheros AR9331 (16MB flash)
-  DEVICE_PACKAGES := kmod-usb-core kmod-usb2
-endef
-LEGACY_DEVICES += YUN_16M
 
 define LegacyDevice/F9K1115V2
   DEVICE_TITLE := Belkin AC1750DB (F9K1115V2)

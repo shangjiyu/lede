@@ -6,11 +6,11 @@ include $(INCLUDE_DIR)/image.mk
 UBIFS_OPTS = -m 2048 -e 124KiB -c 4096 -U -F
 
 define Image/Prepare
-	$(CP) $(LINUX_DIR)/vmlinux $(KDIR)/$(IMG_PREFIX)-vmlinux.elf
+	$(CP) $(LINUX_DIR)/vmlinux $(KDIR)/vmlinux-unstripped.elf
 endef
 
 define Image/BuildKernel
-	$(CP) $(KDIR)/$(IMG_PREFIX)-vmlinux.elf $(BIN_DIR)
+	$(CP) $(KDIR)/vmlinux-unstripped.elf $(BIN_DIR)/$(IMG_PREFIX)-vmlinux.elf
 endef
 
 define Image/Build/squashfs
@@ -79,12 +79,12 @@ define Device/TpSafeImage
 	KERNEL_SUFFIX := -uImage
 	KERNEL = kernel-bin | append-dtb | uImage none
 	KERNEL_NAME := zImage
-	TPLINK_BOARD_NAME :=
+	TPLINK_BOARD_ID :=
 	IMAGES := factory.bin sysupgrade.bin
 	IMAGE/factory.bin := append-rootfs | tplink-safeloader factory
 	IMAGE/sysupgrade.bin := append-rootfs | tplink-safeloader sysupgrade | append-metadata
 endef
-DEVICE_VARS += TPLINK_BOARD_NAME
+DEVICE_VARS += TPLINK_BOARD_ID
 
 define Device/ZyXELImage
 	PROFILES += $$(DEVICE_NAME)
@@ -102,6 +102,7 @@ define Device/AP148
 	$(call Device/FitImage)
 	$(call Device/UbiFit)
 	DEVICE_DTS := qcom-ipq8064-ap148
+	KERNEL_INSTALL := 1
 	BLOCKSIZE := 128k
 	PAGESIZE := 2048
 	BOARD_NAME := ap148
@@ -126,7 +127,7 @@ define Device/C2600
 	BLOCKSIZE := 128k
 	PAGESIZE := 2048
 	BOARD_NAME := c2600
-	TPLINK_BOARD_NAME := C2600
+	TPLINK_BOARD_ID := C2600
 	DEVICE_TITLE := TP-Link Archer C2600
 	DEVICE_PACKAGES := ath10k-firmware-qca99x0
 endef
