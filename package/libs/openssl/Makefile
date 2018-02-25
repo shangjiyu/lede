@@ -9,9 +9,9 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssl
 PKG_BASE:=1.0.2
-PKG_BUGFIX:=l
+PKG_BUGFIX:=n
 PKG_VERSION:=$(PKG_BASE)$(PKG_BUGFIX)
-PKG_RELEASE:=2
+PKG_RELEASE:=1
 PKG_USE_MIPS16:=0
 
 PKG_BUILD_PARALLEL:=0
@@ -24,10 +24,11 @@ PKG_SOURCE_URL:= \
 	http://gd.tuwien.ac.at/infosys/security/openssl/source/ \
 	http://www.openssl.org/source/ \
 	http://www.openssl.org/source/old/$(PKG_BASE)/
-PKG_HASH:=ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
+PKG_HASH:=370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe
 
 PKG_LICENSE:=OpenSSL
 PKG_LICENSE_FILES:=LICENSE
+PKG_CPE_ID:=cpe:/a:openssl:openssl
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_OPENSSL_ENGINE_CRYPTO \
 	CONFIG_OPENSSL_ENGINE_DIGEST \
@@ -40,7 +41,8 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_OPENSSL_WITH_COMPRESSION \
 	CONFIG_OPENSSL_WITH_NPN \
 	CONFIG_OPENSSL_WITH_PSK \
-	CONFIG_OPENSSL_WITH_SRP
+	CONFIG_OPENSSL_WITH_SRP \
+	CONFIG_OPENSSL_OPTIMIZE_SPEED
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -154,6 +156,10 @@ ifndef CONFIG_OPENSSL_WITH_SRP
   OPENSSL_OPTIONS += no-srp
 endif
 
+ifeq ($(CONFIG_OPENSSL_OPTIMIZE_SPEED),y)
+  TARGET_CFLAGS := $(filter-out -Os,$(TARGET_CFLAGS)) -O3
+endif
+
 ifeq ($(CONFIG_x86_64),y)
   OPENSSL_TARGET:=linux-x86_64-openwrt
   OPENSSL_MAKEFLAGS += LIBDIR=lib
@@ -184,14 +190,12 @@ define Build/Configure
 			--openssldir=/etc/ssl \
 			$(TARGET_CPPFLAGS) \
 			$(TARGET_LDFLAGS) -ldl \
-			-DOPENSSL_SMALL_FOOTPRINT \
+			$(if $(CONFIG_OPENSSL_OPTIMIZE_SPEED),,-DOPENSSL_SMALL_FOOTPRINT) \
 			$(OPENSSL_NO_CIPHERS) \
 			$(OPENSSL_OPTIONS) \
 	)
-	# XXX: OpenSSL "make depend" will look for installed headers before its own,
-	# so remove installed stuff first
-	-$(SUBMAKE) -j1 clean-staging
 	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		CROSS_COMPILE="$(TARGET_CROSS)" \
 		MAKEDEPPROG="$(TARGET_CROSS)gcc" \
 		OPENWRT_OPTIMIZATION_FLAGS="$(TARGET_CFLAGS)" \
 		$(OPENSSL_MAKEFLAGS) \
@@ -203,6 +207,7 @@ TARGET_LDFLAGS += -Wl,--gc-sections
 
 define Build/Compile
 	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		CROSS_COMPILE="$(TARGET_CROSS)" \
 		CC="$(TARGET_CC)" \
 		ASFLAGS="$(TARGET_ASFLAGS) -I$(PKG_BUILD_DIR)/crypto -c" \
 		AR="$(TARGET_CROSS)ar r" \
@@ -211,6 +216,7 @@ define Build/Compile
 		$(OPENSSL_MAKEFLAGS) \
 		all
 	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		CROSS_COMPILE="$(TARGET_CROSS)" \
 		CC="$(TARGET_CC)" \
 		ASFLAGS="$(TARGET_ASFLAGS) -I$(PKG_BUILD_DIR)/crypto -c" \
 		AR="$(TARGET_CROSS)ar r" \
@@ -221,11 +227,13 @@ define Build/Compile
 	# Work around openssl build bug to link libssl.so with libcrypto.so.
 	-rm $(PKG_BUILD_DIR)/libssl.so.*.*.*
 	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		CROSS_COMPILE="$(TARGET_CROSS)" \
 		CC="$(TARGET_CC)" \
 		OPENWRT_OPTIMIZATION_FLAGS="$(TARGET_CFLAGS)" \
 		$(OPENSSL_MAKEFLAGS) \
 		do_linux-shared
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CROSS_COMPILE="$(TARGET_CROSS)" \
 		CC="$(TARGET_CC)" \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
 		$(OPENSSL_MAKEFLAGS) \

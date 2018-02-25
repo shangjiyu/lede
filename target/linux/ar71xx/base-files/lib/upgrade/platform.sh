@@ -183,15 +183,6 @@ alfa_check_image() {
 	return 0
 }
 
-platform_nand_board_name() {
-	local board=$(board_name)
-
-	case "$board" in
-	rb*) echo "routerboard";;
-	*) echo "$board";;
-	esac
-}
-
 platform_check_image() {
 	local board=$(board_name)
 	local magic="$(get_magic_word "$1")"
@@ -217,9 +208,12 @@ platform_check_image() {
 	carambola2|\
 	cf-e316n-v2|\
 	cf-e320n-v2|\
-	cf-e355ac|\
+	cf-e355ac-v1|\
+	cf-e355ac-v2|\
+	cf-e375ac|\
 	cf-e380ac-v1|\
 	cf-e380ac-v2|\
+	cf-e385ac|\
 	cf-e520n|\
 	cf-e530n|\
 	cpe505n|\
@@ -238,18 +232,24 @@ platform_check_image() {
 	dlan-hotspot|\
 	dlan-pro-1200-ac|\
 	dlan-pro-500-wp|\
+	dr342|\
 	dr531|\
 	dragino2|\
+	e1700ac-v2|\
+	e600g-v2|\
+	e600gac-v2|\
 	ebr-2310-c1|\
 	ens202ext|\
 	epg5000|\
 	esr1750|\
 	esr900|\
+	ew-balin|\
 	ew-dorin|\
 	ew-dorin-router|\
 	gl-ar150|\
 	gl-ar300m|\
 	gl-ar300|\
+	gl-ar750|\
 	gl-domino|\
 	gl-mifi|\
 	gl-usb150|\
@@ -260,11 +260,14 @@ platform_check_image() {
 	loco-m-xw|\
 	mzk-w04nu|\
 	mzk-w300nh|\
+	n5q|\
 	nanostation-m|\
 	nanostation-m-xw|\
 	nbg460n_550n_550nh|\
 	pqi-air-pen|\
+	r36a|\
 	r602n|\
+	rme-eg200|\
 	rocket-m|\
 	rocket-m-ti|\
 	rocket-m-xw|\
@@ -273,15 +276,18 @@ platform_check_image() {
 	sc300m|\
 	sc450|\
 	sr3200|\
+	t830|\
 	tew-632brp|\
 	tew-712br|\
 	tew-732br|\
 	tew-823dru|\
+	tl-wr1043n-v5|\
 	tl-wr942n-v1|\
 	unifi|\
 	unifi-outdoor|\
 	unifiac-lite|\
 	unifiac-pro|\
+	wam250|\
 	weio|\
 	whr-g301n|\
 	whr-hp-g300n|\
@@ -317,6 +323,7 @@ platform_check_image() {
 	ap136-020|\
 	ap147-010|\
 	ap152|\
+	ap91-5g|\
 	ap96|\
 	arduino-yun|\
 	bhr-4grv2|\
@@ -385,13 +392,19 @@ platform_check_image() {
 	el-m150|\
 	el-mini|\
 	gl-inet|\
+	lan-turtle|\
 	mc-mac1200r|\
 	minibox-v1|\
 	omy-g1|\
 	omy-x1|\
 	onion-omega|\
-	oolite|\
+	oolite-v1|\
+	oolite-v5.2|\
+	oolite-v5.2-dev|\
+	packet-squirrel|\
+	re355|\
 	re450|\
+	rut900|\
 	smart-300|\
 	som9331|\
 	tellstick-znet-lite|\
@@ -422,6 +435,7 @@ platform_check_image() {
 	tl-wa901nd-v2|\
 	tl-wa901nd-v3|\
 	tl-wa901nd-v4|\
+	tl-wa901nd-v5|\
 	tl-wdr3320-v2|\
 	tl-wdr3500|\
 	tl-wdr4300|\
@@ -442,6 +456,7 @@ platform_check_image() {
 	tl-wr802n-v1|\
 	tl-wr802n-v2|\
 	tl-wr810n|\
+	tl-wr810n-v2|\
 	tl-wr840n-v2|\
 	tl-wr840n-v3|\
 	tl-wr841n-v1|\
@@ -455,7 +470,8 @@ platform_check_image() {
 	tl-wr940n-v4|\
 	tl-wr941nd|\
 	tl-wr941nd-v5|\
-	tl-wr941nd-v6)
+	tl-wr941nd-v6|\
+	wifi-pineapple-nano)
 		local magic_ver="0100"
 
 		case "$board" in
@@ -517,6 +533,7 @@ platform_check_image() {
 	rb-911g-5hpacd|\
 	rb-912uag-2hpnd|\
 	rb-912uag-5hpnd|\
+	rb-921gs-5hpacd-r2|\
 	rb-951g-2hnd|\
 	rb-951ui-2hnd|\
 	rb-2011l|\
@@ -659,12 +676,17 @@ platform_check_image() {
 	rb-750-r2|\
 	rb-750p-pbr2|\
 	rb-750up-r2|\
+	rb-911-2hn|\
+	rb-911-5hn|\
 	rb-941-2nd|\
 	rb-951ui-2nd|\
 	rb-952ui-5ac2nd|\
 	rb-962uigs-5hact2hnt|\
 	rb-lhg-5nd|\
-	rb-mapl-2nd)
+	rb-map-2nd|\
+	rb-mapl-2nd|\
+	rb-wap-2nd|\
+	rb-wapg-5hact2hnd)
 		return 0
 		;;
 	esac
@@ -677,59 +699,22 @@ platform_pre_upgrade() {
 	local board=$(board_name)
 
 	case "$board" in
-	c-60|\
-	hiveap-121|\
-	nbg6716|\
-	r6100|\
-	rambutan|\
-	rb-411|\
-	rb-411u|\
-	rb-433|\
-	rb-433u|\
-	rb-435g|\
-	rb-450|\
-	rb-450g|\
-	rb-493|\
-	rb-493g|\
-	rb-750|\
-	rb-750gl|\
-	rb-751|\
-	rb-751g|\
-	rb-911g-2hpnd|\
-	rb-911g-5hpacd|\
-	rb-911g-5hpnd|\
-	rb-912uag-2hpnd|\
-	rb-912uag-5hpnd|\
-	rb-951g-2hnd|\
-	rb-951ui-2hnd|\
-	rb-2011il|\
-	rb-2011l|\
-	rb-2011uas|\
-	rb-2011uas-2hnd|\
-	rb-2011uias|\
-	rb-2011uias-2hnd|\
-	rb-sxt2n|\
-	rb-sxt5n|\
-	wi2a-ac200i|\
-	wndr3700v4|\
-	wndr4300)
-		nand_do_upgrade "$1"
-		;;
 	rb-750-r2|\
 	rb-750p-pbr2|\
 	rb-750up-r2|\
+	rb-911-2hn|\
+	rb-911-5hn|\
 	rb-941-2nd|\
 	rb-951ui-2nd|\
 	rb-952ui-5ac2nd|\
 	rb-962uigs-5hact2hnt|\
 	rb-lhg-5nd|\
-	rb-mapl-2nd)
+	rb-map-2nd|\
+	rb-mapl-2nd|\
+	rb-wap-2nd|\
+	rb-wapg-5hact2hnd)
 		# erase firmware if booted from initramfs
 		[ -z "$(rootfs_type)" ] && mtd erase firmware
-		;;
-	mr18|\
-	z1)
-		merakinand_do_upgrade "$1"
 		;;
 	esac
 }
@@ -819,6 +804,49 @@ platform_do_upgrade() {
 	om5p-an)
 		platform_do_upgrade_openmesh "$ARGV"
 		;;
+	c-60|\
+	hiveap-121|\
+	nbg6716|\
+	r6100|\
+	rambutan|\
+	rb-411|\
+	rb-411u|\
+	rb-433|\
+	rb-433u|\
+	rb-435g|\
+	rb-450|\
+	rb-450g|\
+	rb-493|\
+	rb-493g|\
+	rb-750|\
+	rb-750gl|\
+	rb-751|\
+	rb-751g|\
+	rb-911g-2hpnd|\
+	rb-911g-5hpacd|\
+	rb-911g-5hpnd|\
+	rb-912uag-2hpnd|\
+	rb-912uag-5hpnd|\
+	rb-921gs-5hpacd-r2|\
+	rb-951g-2hnd|\
+	rb-951ui-2hnd|\
+	rb-2011il|\
+	rb-2011l|\
+	rb-2011uas|\
+	rb-2011uas-2hnd|\
+	rb-2011uias|\
+	rb-2011uias-2hnd|\
+	rb-sxt2n|\
+	rb-sxt5n|\
+	wi2a-ac200i|\
+	wndr3700v4|\
+	wndr4300)
+		nand_do_upgrade "$1"
+		;;
+	mr18|\
+	z1)
+		merakinand_do_upgrade "$1"
+		;;
 	uap-pro|\
 	unifi-outdoor-plus)
 		MTD_CONFIG_ARGS="-s 0x180000"
@@ -833,13 +861,3 @@ platform_do_upgrade() {
 		;;
 	esac
 }
-
-disable_watchdog() {
-	killall watchdog
-	( ps | grep -v 'grep' | grep '/dev/watchdog' ) && {
-		echo 'Could not disable watchdog'
-		return 1
-	}
-}
-
-append sysupgrade_pre_upgrade disable_watchdog

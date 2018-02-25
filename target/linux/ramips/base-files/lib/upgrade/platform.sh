@@ -16,11 +16,14 @@ platform_check_image() {
 	a5-v11|\
 	ai-br100|\
 	air3gii|\
+	alfa-network,ac1200rm|\
+	alfa-network,awusfree1|\
 	all0239-3g|\
 	all0256n-4M|\
 	all0256n-8M|\
 	all5002|\
 	all5003|\
+	mediatek,ap-mt7621a-v60|\
 	ar725w|\
 	asl26555-8M|\
 	asl26555-16M|\
@@ -60,6 +63,7 @@ platform_check_image() {
 	fonera20n|\
 	freestation5|\
 	gb-pc1|\
+	gnubee,gb-pc2|\
 	gl-mt300a|\
 	gl-mt300n|\
 	gl-mt750|\
@@ -81,7 +85,6 @@ platform_check_image() {
 	kn_rf|\
 	kng_rc|\
 	linkits7688|\
-	linkits7688d|\
 	m2m|\
 	m3|\
 	m4-4M|\
@@ -108,6 +111,7 @@ platform_check_image() {
 	nbg-419n|\
 	nbg-419n2|\
 	newifi-d1|\
+	d-team,newifi-d2|\
 	nixcore-x1-8M|\
 	nixcore-x1-16M|\
 	nw718|\
@@ -130,6 +134,7 @@ platform_check_image() {
 	rt-ac51u|\
 	rt-g32-b1|\
 	rt-n10-plus|\
+	rt-n12p|\
 	rt-n13u|\
 	rt-n14u|\
 	ry-1a|\
@@ -139,6 +144,7 @@ platform_check_image() {
 	sap-g3200u3|\
 	sk-wb8|\
 	sl-r7205|\
+	tama,w06|\
 	tew-638apb-v2|\
 	tew-691gr|\
 	tew-692gr|\
@@ -146,9 +152,12 @@ platform_check_image() {
 	timecloud|\
 	tiny-ac|\
 	u25awf-h1|\
+	u7621-06-256M-16M|\
+	u7628-01-128M-16M|\
 	ur-326n4g|\
 	ur-336un|\
 	v22rw-2x2|\
+	vonets,var11n-300|\
 	vocore-8M|\
 	vocore-16M|\
 	vocore2|\
@@ -163,7 +172,8 @@ platform_check_image() {
 	whr-300hp2|\
 	whr-600d|\
 	whr-g300n|\
-	widora-neo|\
+	widora,neo-16m|\
+	widora,neo-32m|\
 	witi|\
 	wizfi630a|\
 	wl-330n|\
@@ -199,8 +209,10 @@ platform_check_image() {
 	zbt-ape522ii|\
 	zbt-cpe102|\
 	zbt-wa05|\
+	zbtlink,zbt-we1226|\
 	zbt-we1326|\
 	zbt-we2026|\
+	zbtlink,zbt-we3526|\
 	zbt-we826-16M|\
 	zbt-we826-32M|\
 	zbt-wg2626|\
@@ -232,11 +244,15 @@ platform_check_image() {
 		}
 		return 0
 		;;
-	c20|\
 	c20i|\
 	c50|\
 	mr200|\
+	tplink,c20-v1|\
+	tplink,c20-v4|\
+	tplink,c50-v3|\
+	tplink,tl-mr3420-v5|\
 	tl-wr840n-v4|\
+	tl-wr840n-v5|\
 	tl-wr841n-v13)
 		[ "$magic" != "03000000" ] && {
 			echo "Invalid image type."
@@ -257,9 +273,11 @@ platform_check_image() {
 		;;
 	hc5962|\
 	mir3g|\
-	r6220)
-		# these boards use metadata images
-		return 0
+	r6220|\
+	ubnt-erx|\
+	ubnt-erx-sfp)
+		nand_do_platform_check "$board" "$1"
+		return $?;
 		;;
 	re350-v1)
 		[ "$magic" != "01000000" ] && {
@@ -267,11 +285,6 @@ platform_check_image() {
 			return 1
 		}
 		return 0
-		;;
-	ubnt-erx|\
-	ubnt-erx-sfp)
-		nand_do_platform_check "$board" "$1"
-		return $?;
 		;;
 	wcr-1166ds|\
 	wsr-1166)
@@ -315,17 +328,8 @@ platform_do_upgrade() {
 	esac
 }
 
-disable_watchdog() {
-	killall watchdog
-	( ps | grep -v 'grep' | grep '/dev/watchdog' ) && {
-		echo 'Could not disable watchdog'
-		return 1
-	}
-}
-
 blink_led() {
 	. /etc/diag.sh; set_state upgrade
 }
 
-append sysupgrade_pre_upgrade disable_watchdog
 append sysupgrade_pre_upgrade blink_led

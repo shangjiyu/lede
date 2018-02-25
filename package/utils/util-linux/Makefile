@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2015 OpenWrt.org
+# Copyright (C) 2007-2018 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,12 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=util-linux
 PKG_VERSION:=2.30.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=@KERNEL/linux/utils/$(PKG_NAME)/v2.30
 PKG_HASH:=7b5be5489e9b5b7177832836467aba1c87bf0e9bcbcb5a6f35d76cd4782589dc
+PKG_CPE_ID:=cpe:/a:kernel:util-linux
 
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=	COPYING					\
@@ -204,6 +205,19 @@ define Package/flock/description
   manages flock locks from within shell scripts or the command line
 endef
 
+define Package/fstrim
+$(call Package/util-linux/Default)
+  TITLE:=discard unused blocks on a mounted filesystem
+  DEPENDS:= +libblkid +libuuid +libsmartcols +libmount
+  SUBMENU=Filesystem
+endef
+
+define Package/fstrim/description
+  fstrim is used on a mounted filesystem to discard (or "trim") blocks
+  which are not in use by the filesystem.  This is useful for solid-
+  state drives (SSDs) and thinly-provisioned storage.
+endef
+
 define Package/getopt
 $(call Package/util-linux/Default)
   TITLE:=parse command options (enhanced)
@@ -262,6 +276,16 @@ endef
 
 define Package/lsblk/description
  lsblk lists information about all or the specified block devices
+endef
+
+define Package/lscpu
+$(call Package/util-linux/Default)
+  TITLE:=display information about the CPU architecture
+  DEPENDS:= +libsmartcols
+endef
+
+define Package/lscpu/description
+ lscpu displays information about the CPU architecture
 endef
 
 define Package/mcookie
@@ -552,6 +576,11 @@ define Package/flock/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/flock $(1)/usr/bin/
 endef
 
+define Package/fstrim/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/fstrim $(1)/usr/sbin/
+endef
+
 define Package/getopt/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/getopt $(1)/usr/bin/
@@ -580,6 +609,11 @@ endef
 define Package/lsblk/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/lsblk $(1)/usr/bin/
+endef
+
+define Package/lscpu/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/lscpu $(1)/usr/bin/
 endef
 
 define Package/mcookie/install
@@ -677,12 +711,14 @@ $(eval $(call BuildPackage,dmesg))
 $(eval $(call BuildPackage,fdisk))
 $(eval $(call BuildPackage,findfs))
 $(eval $(call BuildPackage,flock))
+$(eval $(call BuildPackage,fstrim))
 $(eval $(call BuildPackage,getopt))
 $(eval $(call BuildPackage,hwclock))
 $(eval $(call BuildPackage,logger))
 $(eval $(call BuildPackage,look))
 $(eval $(call BuildPackage,losetup))
 $(eval $(call BuildPackage,lsblk))
+$(eval $(call BuildPackage,lscpu))
 $(eval $(call BuildPackage,mcookie))
 $(eval $(call BuildPackage,mount-utils))
 $(eval $(call BuildPackage,namei))

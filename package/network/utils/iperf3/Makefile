@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iperf
-PKG_VERSION:=3.2
+PKG_VERSION:=3.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.es.net/pub/iperf
-PKG_HASH:=f207b36f861485845dbdf09f909c62f3d2222a3cf3d2682095aede8213cd9c1d
+PKG_HASH:=71528332d751df85e046d1944d9a0269773cadd6e51840aecdeed30925f79111
 
 PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 PKG_LICENSE:=BSD-3-Clause
