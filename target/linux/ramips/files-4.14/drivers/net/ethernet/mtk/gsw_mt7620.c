@@ -166,6 +166,7 @@ static void mt7620_hw_init(struct mt7620_gsw *gsw, struct device_node *np)
 		_mt7620_mii_write(gsw, 4, 30, 0xa000);
 		_mt7620_mii_write(gsw, 4, 4, 0x05e1);
 		_mt7620_mii_write(gsw, 4, 16, 0x1313);
+		_mt7620_mii_write(gsw, 4, 0, 0x3100);
 		pr_info("gsw: setting port4 to ephy mode\n");
 	}
 }
@@ -214,8 +215,8 @@ static int mt7620_gsw_probe(struct platform_device *pdev)
 		return -ENOMEM;
 
 	gsw->base = devm_ioremap_resource(&pdev->dev, res);
-	if (!gsw->base)
-		return -EADDRNOTAVAIL;
+	if (IS_ERR(gsw->base))
+		return PTR_ERR(gsw->base);
 
 	gsw->dev = &pdev->dev;
 

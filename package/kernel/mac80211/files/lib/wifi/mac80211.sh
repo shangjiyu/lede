@@ -84,14 +84,16 @@ detect_mac80211() {
 
 		ssid_suffix=_$(cat /sys/class/ieee80211/${dev}/macaddress | sed 's/.[0-9A-Fa-f]:.[0-9A-Fa-f]:.[0-9A-Fa-f]:\(.[0-9A-Fa-f]\):\(.[0-9A-Fa-f]\):\(.[0-9A-Fa-f]\)/\1\2\3/g' | tr :[a-z] :[A-Z])
 		iw phy "$dev" info | grep -q 'Capabilities:' && htmode=HT20
-		iw phy "$dev" info | grep -q '2412 MHz' || { mode_band="a"; channel="149"; }
 
-		vht_cap=$(iw phy "$dev" info | grep -c 'VHT Capabilities')
-		cap_5ghz=$(iw phy "$dev" info | grep -c "Band 2")
-		[ "$vht_cap" -gt 0 -a "$cap_5ghz" -gt 0 ] && {
-			mode_band="a";
+		iw phy "$dev" info | grep -q '5180 MHz' && {
+			mode_band="a"
 			channel="149"
-			htmode="VHT80"
+			iw phy "$dev" info | grep -q 'VHT Capabilities' && htmode="VHT80"
+		}
+
+		[ -n "$htmode" ] && ht_capab="set wireless.radio${devidx}.htmode=$htmode"
+
+		if [ -x /usr/bin/readlink -a -h /sys/class/ieee80211/${dev} ]; then
 		}
 
 		[ -n "$htmode" ] && ht_capab="set wireless.radio${devidx}.htmode=$htmode"
